@@ -1,17 +1,21 @@
 # Linear Programming Coursework
 Published by Zijin Qin (Jin).
 
-Zijin's code repertory when attending the linear programming course.
+Zijin's code repertory related to the assignment in the linear programming course (ISE 536).
 
 ## Update
 
-[Assignment 1 Investment Problem](assignment1/investment.py)
+[Assignment 4 MVO](assignment4/mvo_portforlio.py)
 
-## Libraries
+## Category
 
-OR-Tools
+Assignments
+
+- [Assignment 1 Q1: Investment Problem](./assignment1/investment.py)
+- [Assignment 4 Q8: Mean-Variance Optimization](./assignment4/mvo_portforlio.py)
+
+## Install Libraries
 
 ```
-python -m pip install --upgrade --user ortools
+py -m pip install -r requirements.txt
 ```
-
