@@ -1,5 +1,7 @@
 # Maximum Cut for Tree
 
+[Return to Homepage](https://github.com/Jziumo/linear_programming_course)
+
 ## Problem Description
 
 In the maximum cut problem, we are given an undirected, weighted network $G = (V, E)$, and our goal is to ﬁnd a subset $S ⊂ V$ that maximizes the sum of the weights of all the edges crossing $S$, that is, we want to solve the problem, 
