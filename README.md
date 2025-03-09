@@ -1,7 +1,8 @@
-# Linear Programming Coursework
+# Operations Research Library
+
 Published by Zijin Qin (Jin).
 
-Zijin's code repertory related to the assignment in the linear programming course (ISE 536, ISE 632).
+This is Jin's code repertory related to the linear programming (ISE 536) and network optimization course (ISE 632). 
 
 ## Update
 

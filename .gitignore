@@ -1,6 +1,2 @@
 .idea/
-ch2_finding_feasible_solutions copy.py
-ch2_finding_feasible_solutions.py
-ch3_mixed_integer_problem.py
-main.py
-/packing_problem
+./venv/
