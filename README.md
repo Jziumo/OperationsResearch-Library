@@ -26,6 +26,7 @@ Clone this project:
 
 ```
 https://github.com/Jziumo/OperationsResearch-Library.git
+cd OperationsResearch-Library
 ```
 
 Create a new virtual environment `venv` in current directory: 
