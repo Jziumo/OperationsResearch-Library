@@ -1,2 +1,0 @@
-# Mean-Variance Optimization (MVO)
-
