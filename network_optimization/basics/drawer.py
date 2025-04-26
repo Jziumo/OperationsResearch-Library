@@ -36,7 +36,10 @@ class Drawer:
         pos = self.get_nx_pos(G, nx_layout) if custom_layers == None else self.get_custom_pos(layers=custom_layers)
 
         labels = {node: f'{node}' for node in G.nodes}
-        font_color = FontColorChooser().choose_font_color(node_color)
+        if isinstance(node_color, str): 
+            font_color = FontColorChooser().choose_font_color(node_color)  
+        elif isinstance(node_color, list):
+            font_color = FontColorChooser().choose_font_color(node_color[0]) 
 
         # Determine if the graph is weighted or not.
         weighted_graph = False
@@ -58,6 +61,15 @@ class Drawer:
         if weighted_graph and draw_edge_weight: 
             edge_labels = {(u, v): d['weight'] for u, v, d in G.edges(data=True)}
             nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=edge_font_size, font_family=font_family)
+
+        # If the `node_color` is a list of colors rather than a single color, assign different colors to each font. 
+        if isinstance(node_color, list): 
+            # Font colors for the label text on each node. 
+            font_color_map = {node: FontColorChooser().choose_font_color(node_color[i]) for i, node in enumerate(G.nodes)}
+
+            # Draw the labels of vertices.
+            for node, label in labels.items():
+                nx.draw_networkx_labels(G, pos, labels={node: label}, font_size=font_size, font_family=font_family, font_color=font_color_map[node])
         
         plt.title("Network Representation")
         plt.show()
