@@ -4,7 +4,7 @@ from collections import deque
 import matplotlib.font_manager as fm
 
 grid_file_path = './network_ps2/example_grid.txt'
-font_path = './fonts/BRIANNETOD.ttf'
+font_path = './fonts/BRIANNETOD.TTF'
 font_prop = fm.FontProperties(fname=font_path)
 
 def readGrid(file_path=grid_file_path):

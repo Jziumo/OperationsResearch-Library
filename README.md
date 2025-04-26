@@ -6,7 +6,7 @@ This is Jin's code repertory related to the linear programming course (ISE 536) 
 
 ## Most Recent Update
 
-[PS4: Maximum Cut for Tree](./network_ps4/maximum_cut_tree.md)
+- [PS8: Vertex Cover for Tree (DP)](./network_optimization/dp/vertex_cover_for_tree.ipynb)
 
 ## Category
 
@@ -19,6 +19,8 @@ Linear Programming
 Network Flows
 
 - [PS4: Maximum Cut for Tree](./network_optimization/maximize_cut_tree/maximum_cut_tree.md)
+
+- [PS8: Vertex Cover for Tree (DP)](./network_optimization/dp/vertex_cover_for_tree.ipynb)
 
 ## How to run these scripts?
 

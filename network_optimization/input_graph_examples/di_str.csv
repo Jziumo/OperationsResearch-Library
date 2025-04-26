@@ -1,0 +1,6 @@
+u, v, weight
+s, a, 2
+s, b, 1
+a, b, 3
+a, t, 1
+b, t, 2
