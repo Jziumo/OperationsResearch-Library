@@ -1,1 +1,9 @@
 /venv/
+network_optimization/basics/drawing_script.py
+network_optimization/output_graph_images
+network_optimization/basics/__pycache__
+network_optimization/basics/test.py
+.vscode
+src/drawing_script.py
+src/test.py
+src/or_utils.egg-info

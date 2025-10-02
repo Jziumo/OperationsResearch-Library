@@ -27,7 +27,8 @@ def read_graph_file(file_path, force_unweighted=False):
     return edges
 
 def create_adj_list(edges, directed_graph=False):
-    """Create an adjacency list based on the edges list. 
+    """
+    Create an adjacency list based on the edges list. 
     """
     # determine if the graph is weighted or not
     weighted_graph = True if len(edges[0]) == 3 else False 
@@ -60,11 +61,53 @@ def create_adj_list(edges, directed_graph=False):
 
     return adjList
 
+def create_dist_matrix(edges, directed_graph=False):
+    """
+    Create a distance matrix (dict of dicts) from the list of edges.
+    If the graph is unweighted, all weights default to 1.
+    """
+    weighted_graph = True if len(edges[0]) == 3 else False
+
+    # Collect all nodes
+    nodes = set()
+    for edge in edges:
+        nodes.add(edge[0])
+        nodes.add(edge[1])
+    nodes = list(nodes)
+
+    # Initialize distance matrix with infinities
+    dist = {u: {v: float('inf') for v in nodes} for u in nodes}
+    for u in nodes:
+        dist[u][u] = 0  # distance to self is 0
+
+    # Fill in edge distances
+    for edge in edges:
+        u, v = edge[0], edge[1]
+        w = edge[2] if weighted_graph else 1
+
+        dist[u][v] = w
+        if not directed_graph:
+            dist[v][u] = w
+
+    return dist
+
 def get_adj_list(file_path, directed_graph=False, force_unweighted=False):
     """
     Get adjacency list from the file with given path. 
     """
     return create_adj_list(read_graph_file(file_path, force_unweighted), directed_graph)
+
+def get_adj_list_from_edges(edges, directed_graph=False): 
+    """
+    Get adjacency list from the list of edges. 
+    """
+    return create_adj_list(edges=edges, directed_graph=directed_graph)
+
+def get_dist_matrix_from_edges(edges, directed_graph=False): 
+    """
+    Get distance matrix (dict of dicts) from the list of edges. 
+    """
+    return create_dist_matrix(edges=edges, directed_graph=directed_graph)
 
 def get_nx_network(file_path, directed_graph=False, weighted_graph=False):
     """

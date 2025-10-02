@@ -2,14 +2,9 @@ import networkx as nx
 import matplotlib.pyplot as plt 
 import matplotlib.font_manager as fm
 import os
-import sys
 import math
 import numpy as np
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-
-import readGraph
 
 class Drawer: 
     """
@@ -24,7 +19,7 @@ class Drawer:
         self.font_init()
         pass
 
-    def draw_network(self, G : nx.Graph, figsize=(6,4.5), nx_layout='spring', custom_layers=None, with_labels=True, draw_edge_weight=True, node_size=600, node_color="#6677cc", edge_color="gray", edge_font_size=10, linewidths=1.0, font_size=13, font_family="Comic Code", arrowstyle='->', arrowsize=12): 
+    def draw_network(self, G : nx.Graph, figsize=(6,4.5), nx_layout='spring', custom_layers=None, with_labels=True, draw_edge_weight=True, node_size=600, node_color="#6677cc", edge_color="gray", edge_font_size=10, linewidths=1.0, font_size=13, font_family="Comic Code", arrowstyle='->', arrowsize=12, label_pos=0.5, label_pos_map=None): 
         """
         Draw the network with given parameters. 
         The network is represented by a networkX graph object. 
@@ -60,7 +55,11 @@ class Drawer:
         # If it is weighted graph, draw the edge weight.
         if weighted_graph and draw_edge_weight: 
             edge_labels = {(u, v): d['weight'] for u, v, d in G.edges(data=True)}
-            nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=edge_font_size, font_family=font_family)
+            if label_pos_map == None: 
+                nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=edge_font_size, font_family=font_family, label_pos=label_pos)
+            else: 
+                for u, v, d in G.edges(data=True): 
+                    nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['weight']}, font_size=edge_font_size, font_family=font_family, label_pos=label_pos_map[(u, v)])
 
         # If the `node_color` is a list of colors rather than a single color, assign different colors to each font. 
         if isinstance(node_color, list): 
@@ -75,7 +74,7 @@ class Drawer:
         plt.show()
         return 
     
-    def draw_network_from_edges(self, edges : list, directed_graph=False, weighted_graph=False, figsize=(6,4.5), nx_layout='spring', custom_layers=None, with_labels=True, draw_edge_weight=True, node_size=600, node_color="#6677cc", edge_color="gray", edge_font_size=10, linewidths=1.0, font_size=13, font_family="Comic Code", arrowstyle='->', arrowsize=12): 
+    def draw_network_from_edges(self, edges : list, directed_graph=False, weighted_graph=False, figsize=(6,4.5), nx_layout='spring', custom_layers=None, with_labels=True, draw_edge_weight=True, node_size=600, node_color="#6677cc", edge_color="gray", edge_font_size=10, linewidths=1.0, font_size=13, font_family="Comic Code", arrowstyle='->', arrowsize=12, label_pos=0.5, label_pos_map=None): 
         """
         Draw the network with given parameters. 
         The network is represented by an edges list. 
@@ -85,8 +84,8 @@ class Drawer:
             directed_graph: indicates if the graph is directed. 
             weighted_graph: indicates if the graph is weighted. 
         """
-        G = readGraph.get_nx_network(edges=edges, directed_graph=directed_graph, weighted_graph=weighted_graph)
-        self.draw_network(G, figsize=figsize, nx_layout=nx_layout, custom_layers=custom_layers, with_labels=with_labels, draw_edge_weight=draw_edge_weight, node_size=node_size, node_color=node_color, edge_color=edge_color, edge_font_size=edge_font_size, linewidths=linewidths, font_size=font_size, font_family=font_family, arrowstyle=arrowstyle, arrowsize=arrowsize)
+        G = read_graph.get_nx_network(edges=edges, directed_graph=directed_graph, weighted_graph=weighted_graph)
+        self.draw_network(G, figsize=figsize, nx_layout=nx_layout, custom_layers=custom_layers, with_labels=with_labels, draw_edge_weight=draw_edge_weight, node_size=node_size, node_color=node_color, edge_color=edge_color, edge_font_size=edge_font_size, linewidths=linewidths, font_size=font_size, font_family=font_family, arrowstyle=arrowstyle, arrowsize=arrowsize, label_pos=label_pos, label_pos_map=label_pos_map)
         return
     
     def draw_flow_network(self, G : nx.Graph, layers, start_color='#00FFFF', sink_color='#FF00FF', figsize=(6,4.5), with_labels=True, draw_edge_weight=True, node_size=600, node_color="#6677cc", edge_color="gray", edge_font_size=10, linewidths=1.0, font_size=13, font_family="Comic Code", arrowstyle='->', arrowsize=12): 
@@ -162,7 +161,7 @@ class Drawer:
             layers: A list of layers. Each layer is a list of nodes in this layer. 
             
         """
-        G = readGraph.get_nx_network(edges=edges, directed_graph=True, weighted_graph=weighted_graph)
+        G = read_graph.get_nx_network(edges=edges, directed_graph=True, weighted_graph=weighted_graph)
         self.draw_flow_network(G=G, layers=layers, start_color=start_color, sink_color=sink_color, figsize=figsize, with_labels=with_labels, draw_edge_weight=draw_edge_weight, node_size=node_size, node_color=node_color, edge_color=edge_color, edge_font_size=edge_font_size, linewidths=linewidths, font_size=font_size, font_family=font_family, arrowstyle=arrowstyle, arrowsize=arrowsize)
         return
     
@@ -197,11 +196,13 @@ class Drawer:
         """
         Get positions provided by networkx library. 
         """
-        options = {
-            'spring': nx.spring_layout(G), 
-            'plannar': nx.planar_layout(G)
+        nx_layouts = {
+            'spring': nx.spring_layout,
+            'planar': nx.planar_layout,
+            'circular': nx.circular_layout,
+            'shell': nx.shell_layout
         }
-        return options[layout]
+        return nx_layouts[layout](G)
     
     def get_custom_pos(self, layers): 
         """
@@ -274,9 +275,9 @@ class FontColorChooser:
 if __name__ == '__main__': 
     files_dir = './network_optimization/input_graph_examples/'
     # G = readGraph.get_nx_network(files_dir + 'flow_algorithm_example/flow_ex.csv', directed_graph=True, weighted_graph=True)
-    layers = readGraph.read_layout_file(file_path=files_dir+'flow_complex_layout_example/layout.txt')
-    G = readGraph.get_nx_network(files_dir + 'flow_complex_layout_example/flow.csv', directed_graph=True, weighted_graph=True)
+    layers = read_graph.read_layout_file(file_path=files_dir+'flow_complex_layout_example/layout.txt')
+    G = read_graph.get_nx_network(files_dir + 'flow_complex_layout_example/flow.csv', directed_graph=True, weighted_graph=True)
     Drawer().draw_flow_network(G=G, layers=layers)
 
-    G = readGraph.get_nx_network('./network_optimization/input/unweighted.csv', directed_graph=False, weighted_graph=False)
+    G = read_graph.get_nx_network('./network_optimization/input/unweighted.csv', directed_graph=False, weighted_graph=False)
     Drawer().draw_network(G)
